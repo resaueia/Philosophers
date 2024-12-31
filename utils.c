@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:23:44 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/31 16:03:40 by rsaueia          ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:03 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*monitor(void *arg)
 
 	//i = 0;
 	sim = (t_simulation *)arg;
-	while (1)
+	while (!sim->stop_simulation)
 	{
 		i = 0;
 		while (i < sim->num_philo)
@@ -34,19 +34,33 @@ void	*monitor(void *arg)
 			if (current_time() - sim->philosophers[i].last_meal > sim->time_to_die)
 			{
 				pthread_mutex_lock(&sim->message_lock);
-				printf("Philosopher %d has unfortunately perished!\n", sim->philosophers[i].id);
+				printf("%ld %d has died.\n", current_time(), sim->philosophers[i].id);
 				pthread_mutex_unlock(&sim->message_lock);
-				exit (1);
+				sim->stop_simulation = 1;
+				return (NULL);
 			}
 			i++;
 		}
 		usleep(1000);
 	}
+	return (NULL);
 }
 
 void	print_message(t_philosopher *philosopher, char *message)
 {
 	pthread_mutex_lock(&philosopher->sim->message_lock);
-	printf("Philosopher %d %s\n", philosopher->id, message);
+	printf("Philosopher %d %s.\n", philosopher->id, message);
 	pthread_mutex_unlock(&philosopher->sim->message_lock);
+}
+
+void	print_left(t_philosopher *philosopher, char *message)
+{
+	pthread_mutex_lock(&philosopher->sim->message_lock);
+	printf("Philosofer %d %s %d (left).\n", philosopher->id, message, philosopher->left);
+}
+
+void	print_right(t_philosopher *philosopher, char *message)
+{
+	pthread_mutex_lock(&philosopher->sim->message_lock);
+	printf("Philosofer %d %s %d (right).\n", philosopher->id, message, philosopher->right);
 }

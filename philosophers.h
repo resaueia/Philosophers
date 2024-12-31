@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:21:59 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/31 15:57:26 by rsaueia          ###   ########.fr       */
+/*   Updated: 2024/12/31 17:37:07 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,30 @@ typedef struct s_simulation
 	pthread_mutex_t		message_lock;
 	t_philosopher		*philosophers;  //philosophers array
 	long				time_to_die;
+	long				time_to_eat;
+	long				time_to_sleep;
+	int					stop_simulation;
 } t_simulation;
 
 /***** ACTIONS *****/
-void	think(t_philosopher *philosopher);
-void	eat(t_philosopher *philosopher);
-void	rest(t_philosopher *philosopher);
+void		think(t_philosopher *philosopher);
+void		eat(t_philosopher *philosopher);
+void		rest(t_philosopher *philosopher);
 
 /***** INITIALIZING FUNCTIONS *****/
-void	init_simulation(t_simulation *sim, int num_philo);
-void	start_simulation(t_simulation *sim);
+void		init_simulation(t_simulation *sim, int num_philo);
+void		start_simulation(t_simulation *sim);
 
 /***** BEHAVIORAL FUNCTIONS *****/
-void	*philosopher_routine(void *arg);
+void		*philosopher_routine(void *arg);
 
 /***** UTILS *****/
-void	*monitor(void *arg);
-long	current_time(void);
-void	print_message(t_philosopher *philosopher, char *message);
-
+void		*monitor(void *arg);
+long		current_time(void);
+void		print_message(t_philosopher *philosopher, char *message);
+void		print_left(t_philosopher *philosopher, char *message);
+void		print_right(t_philosopher *philosopher, char *message);
+long int	ft_atol(char *nptr);
+int			ft_atoi(const char *nptr);
+void	cleanup_simulation(t_simulation *sim);
 #endif 
