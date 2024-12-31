@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:48:49 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/30 20:02:16 by rsaueia          ###   ########.fr       */
+/*   Updated: 2024/12/31 16:01:30 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void	init_simulation(t_simulation *sim, int num_philo)
 			perror("Error initializing fork mutex");
 			exit (1);
 		}
+		if (pthread_mutex_init(&sim->message_lock, NULL) != 0)
+		{
+			perror("Error initializinh message mutex");
+			exit (1);
+		}
 		i++;
 	}
 	sim->philosophers = malloc(num_philo * sizeof(t_philosopher));
@@ -46,6 +51,7 @@ void	init_simulation(t_simulation *sim, int num_philo)
 		sim->philosophers[i].left = i;
 		sim->philosophers[i].right = (i + 1) % num_philo;
 		sim->philosophers[i].sim = sim;  // this is so the cycle is properly closed given a round table
+		sim->philosophers[i].last_meal = current_time();
 		i++;
 	}
 }
