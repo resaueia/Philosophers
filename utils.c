@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:23:44 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 15:49:13 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 16:29:59 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	print_message(t_philosopher *philosopher, char *message)
 	pthread_mutex_lock(&philosopher->sim->message_lock);
 	//long int i = current_time();
 	//printf("Philosopher %ld %d %s\n", (i / 1000), philosopher->id, message);
-	printf("%ld Philosopher %d %s\n", current_time(), philosopher->id, message);
+	if (!philosopher->sim->stop_simulation)
+		printf("%ld Philosopher %d %s\n", current_time(), philosopher->id, message);
 	pthread_mutex_unlock(&philosopher->sim->message_lock);
 }
 

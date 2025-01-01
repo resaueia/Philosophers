@@ -6,11 +6,29 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:48:49 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 15:17:58 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 16:41:42 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int		init_threads(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->num_philo)
+	{
+		if (pthread_create(&sim->philosophers[i].thread, NULL, philosopher_routine, &sim->philosophers[i]) != 0 ||
+		pthread_create(&sim->philosophers[i].supervisor_thread, NULL, supervisor_routine, &sim->philosophers[i]) != 0)
+		{
+			perror("Error creating threads");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 void	init_simulation(t_simulation *sim, int num_philo)
 {

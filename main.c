@@ -6,11 +6,33 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 15:11:31 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 16:59:47 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	*supervisor_routine(void *arg)
+{
+	t_philosopher	*philosopher;
+	long			time_since_last_meal;
+
+	philosopher = (t_philosopher *)arg;
+	while (!philosopher->sim->stop_simulation)
+	{
+		time_since_last_meal = current_time() - philosopher->last_meal;
+		if (time_since_last_meal > philosopher->sim->time_to_die)
+		{
+			pthread_mutex_lock(&philosopher->sim->message_lock);
+			print_message(philosopher, "has died");
+			philosopher->sim->stop_simulation = 1;
+			pthread_mutex_unlock(&philosopher->sim->message_lock);
+			return (NULL);
+		}
+		usleep(500);
+	}
+	return (NULL);
+}
 
 void	*philosopher_routine(void *arg)
 {
