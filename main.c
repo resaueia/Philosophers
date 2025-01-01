@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/31 17:43:40 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 15:11:31 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		main(int argc, char **argv)
 	pthread_mutex_lock(&simulation.message_lock);
 	printf("Ending simulation.\n");
 	pthread_mutex_unlock(&simulation.message_lock);
-	i = -1;
+	i = 0;
 	/*while (i < simulation.num_philo)
 	{
 		pthread_cancel(simulation.philosophers[i].thread);

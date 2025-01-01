@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:21:59 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/31 17:37:07 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 14:21:11 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ void		print_left(t_philosopher *philosopher, char *message);
 void		print_right(t_philosopher *philosopher, char *message);
 long int	ft_atol(char *nptr);
 int			ft_atoi(const char *nptr);
-void	cleanup_simulation(t_simulation *sim);
+void		cleanup_simulation(t_simulation *sim);
+
 #endif 

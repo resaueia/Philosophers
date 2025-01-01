@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:23:44 by rsaueia           #+#    #+#             */
-/*   Updated: 2024/12/31 17:54:03 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 15:49:13 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,23 @@ void	*monitor(void *arg)
 void	print_message(t_philosopher *philosopher, char *message)
 {
 	pthread_mutex_lock(&philosopher->sim->message_lock);
-	printf("Philosopher %d %s.\n", philosopher->id, message);
+	//long int i = current_time();
+	//printf("Philosopher %ld %d %s\n", (i / 1000), philosopher->id, message);
+	printf("%ld Philosopher %d %s\n", current_time(), philosopher->id, message);
 	pthread_mutex_unlock(&philosopher->sim->message_lock);
 }
 
 void	print_left(t_philosopher *philosopher, char *message)
 {
 	pthread_mutex_lock(&philosopher->sim->message_lock);
-	printf("Philosofer %d %s %d (left).\n", philosopher->id, message, philosopher->left);
+	printf("%ld Philosopher %d %s %d (left).\n", current_time(), philosopher->id, message, philosopher->left);
+	pthread_mutex_unlock(&philosopher->sim->message_lock);
+
 }
 
 void	print_right(t_philosopher *philosopher, char *message)
 {
 	pthread_mutex_lock(&philosopher->sim->message_lock);
-	printf("Philosofer %d %s %d (right).\n", philosopher->id, message, philosopher->right);
+	printf("%ld Philosopher %d %s %d (right).\n", current_time(), philosopher->id, message, philosopher->right);
+	pthread_mutex_unlock(&philosopher->sim->message_lock);
 }
