@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:48:49 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 15:17:58 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 17:26:58 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 void	init_simulation(t_simulation *sim, int num_philo)
 {
-	int	i;
+	int				i;
+	struct timeval	tv;
+	
 
 	i = 0;
+	gettimeofday(&tv, NULL);
+	sim->start_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	sim->num_philo = num_philo;
 	sim->forks = malloc(num_philo * sizeof(pthread_mutex_t));
 	if (!sim->forks)
@@ -51,7 +55,7 @@ void	init_simulation(t_simulation *sim, int num_philo)
 		sim->philosophers[i].left = i;
 		sim->philosophers[i].right = (i + 1) % num_philo;
 		sim->philosophers[i].sim = sim;  // this is so the cycle is properly closed given a round table
-		sim->philosophers[i].last_meal = current_time();
+		sim->philosophers[i].last_meal = current_time(sim);
 		i++;
 	}
 }

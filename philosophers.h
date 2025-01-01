@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 17:21:59 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 17:04:53 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 17:25:05 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_simulation
 	long				time_to_eat;
 	long				time_to_sleep;
 	int					stop_simulation;
+	long				start_time;
 } t_simulation;
 
 /***** ACTIONS *****/
@@ -62,7 +63,7 @@ void		*philosopher_routine(void *arg);
 
 /***** UTILS *****/
 void		*monitor(void *arg);
-long		current_time(void);
+long		current_time(t_simulation *sim);
 void		print_message(t_philosopher *philosopher, char *message);
 void		print_left(t_philosopher *philosopher, char *message);
 void		print_right(t_philosopher *philosopher, char *message);

@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:57:12 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 17:04:37 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 17:27:16 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_usleep(long time_in_ms, t_simulation *sim)
 {
 	long	start;
 
-	start = current_time();
-	while (!sim->stop_simulation && (current_time() - start) < time_in_ms)
+	start = current_time(sim);
+	while (!sim->stop_simulation && (current_time(sim) - start) < time_in_ms)
 		usleep(500);
 }

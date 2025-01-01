@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:50:30 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 17:06:48 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 17:26:18 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	eat(t_philosopher *philosopher)
 		//usleep(200000);
 		//usleep(philosopher->sim->time_to_eat * 1000);
 		ft_usleep(philosopher->sim->time_to_eat, philosopher->sim);
-		philosopher->last_meal = current_time();
+		philosopher->last_meal = current_time(philosopher->sim);
 		pthread_mutex_unlock(&philosopher->sim->forks[philosopher->right]);
 		//print_right(philosopher, "has released a fork");
 		pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);

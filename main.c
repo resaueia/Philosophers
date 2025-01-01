@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 15:11:31 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/01 17:27:32 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	*philosopher_routine(void *arg)
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)arg;
-	philosopher->last_meal = current_time();
+	philosopher->last_meal = current_time(philosopher->sim);
 	while (!philosopher->sim->stop_simulation)
 	{
 		think(philosopher);
