@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 19:26:46 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/02 20:08:32 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	validate_args(int argc, char **argv, t_simulation *sim)
 	return (0);
 }*/
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
     t_simulation simulation;
     pthread_t monitor_thread;
@@ -109,4 +109,49 @@ int main(int argc, char **argv)
 
     cleanup_simulation(&simulation);
     return 0;
+}*/
+
+int		main(int argc, char **argv)
+{
+	t_simulation	simulation;
+	pthread_t		monitor_thread;
+	int				i;
+	
+	if (validate_args(argc, argv, &simulation))
+		return (1);
+	init_simulation(&simulation, simulation.num_philo);
+	simulation.stop_simulation = 0;
+	if (pthread_create(&monitor_thread, NULL, monitor, &simulation) != 0)
+	{
+		perror("Error creating monitor thread");
+		cleanup_simulation(&simulation);
+		exit (1);
+	}
+	start_simulation(&simulation);
+	//sleep(3);
+	pthread_mutex_lock(&simulation.message_lock);
+	printf("Ending simulation.\n");
+	pthread_mutex_unlock(&simulation.message_lock);
+	i = 0;
+	/*while (i < simulation.num_philo)
+	{
+		pthread_cancel(simulation.philosophers[i].thread);
+		pthread_join(simulation.philosophers[i].thread, NULL);
+		i++;
+	}
+	pthread_cancel(monitor_thread);
+    pthread_join(monitor_thread, NULL);
+	i = -1;
+	while (++i < simulation.num_philo)
+	{
+		pthread_mutex_destroy(&simulation.forks[i]);
+		pthread_mutex_destroy(&simulation.message_lock);
+	}
+	free(simulation.forks);
+	free(simulation.philosophers);*/
+	while (++i < simulation.num_philo)
+		pthread_join(simulation.philosophers[i].thread, NULL);
+	pthread_join(monitor_thread, NULL);
+	cleanup_simulation(&simulation);
+	return (0);
 }
