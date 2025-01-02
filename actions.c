@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:50:30 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 17:26:18 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/02 19:36:26 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,39 @@ void	think(t_philosopher *philosopher)
 		return ;
 	print_message(philosopher, "is currently thinking.");
 	ft_usleep(philosopher->sim->time_to_sleep / 2, philosopher->sim);
-	//printf("Philosofer %d is currently thinking.\n", philosopher->id);
-	//usleep((philosopher->sim->time_to_sleep / 2) * 1000);
-	//usleep(15000);
+	// printf("Philosofer %d is currently thinking.\n", philosopher->id);
+	// usleep((philosopher->sim->time_to_sleep / 2) * 1000);
+	// usleep(15000);
 }
 
-void	eat(t_philosopher *philosopher)
+void eat(t_philosopher *philosopher)
+{
+    if (philosopher->sim->stop_simulation)
+        return;
+
+    pthread_mutex_lock(&philosopher->sim->forks[philosopher->left]);
+    print_message(philosopher, "has taken a fork");
+
+    pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
+    print_message(philosopher, "has taken a fork");
+
+    if (philosopher->sim->stop_simulation)
+    {
+        pthread_mutex_unlock(&philosopher->sim->forks[philosopher->right]);
+        pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);
+        return;
+    }
+
+    print_message(philosopher, "is eating!");
+    philosopher->last_meal = current_time(philosopher->sim);
+    ft_usleep(philosopher->sim->time_to_eat, philosopher->sim);
+
+    pthread_mutex_unlock(&philosopher->sim->forks[philosopher->right]);
+    pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);
+}
+
+
+/*void	eat(t_philosopher *philosopher)
 {
 	if (philosopher->sim->stop_simulation)
 		return ;
@@ -34,14 +61,14 @@ void	eat(t_philosopher *philosopher)
 		print_left(philosopher, "has taken a fork");
 		//print_right(philosopher, "is attempting to grab fork");
 		if (pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]) != 0)
-		{	
+		{
 			pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);
 			return ;
 		}
 		print_right(philosopher, "has taken a fork");
 	}
 	else
-	{	
+	{
 		//print_right(philosopher, "is attempting to grab fork");
 		pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
 		print_right(philosopher, "has taken a fork");
@@ -62,7 +89,7 @@ void	eat(t_philosopher *philosopher)
 		//print_right(philosopher, "has released a fork");
 		pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);
 		//print_left(philosopher, "has released a fork");
-}
+}*/
 
 /*void	eat(t_philosopher *philosopher)
 {
@@ -91,14 +118,13 @@ void	eat(t_philosopher *philosopher)
 	print_left(philosopher, "has released a fork");
 }*/
 
-
 void	rest(t_philosopher *philosopher)
 {
 	if (philosopher->sim->stop_simulation)
 		return ;
 	print_message(philosopher, "is currently sleeping.");
 	ft_usleep(philosopher->sim->time_to_sleep, philosopher->sim);
-	//printf("Philosopher %d is currently sleeping.\n", philosopher->id);
-	//usleep((philosopher->sim->time_to_sleep / 2) * 1000);
-	//usleep(15000);
+	// printf("Philosopher %d is currently sleeping.\n", philosopher->id);
+	// usleep((philosopher->sim->time_to_sleep / 2) * 1000);
+	// usleep(15000);
 }

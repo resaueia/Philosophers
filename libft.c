@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:57:12 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 17:02:02 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/02 19:37:33 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,25 @@ void	cleanup_simulation(t_simulation *sim)
 	free(sim->philosophers);
 }
 
-void	ft_usleep(long time_in_ms, t_simulation *sim)
+/*void	ft_usleep(long time, t_simulation *sim)
 {
 	long	start;
 
 	start = current_time(sim);
-	while (!sim->stop_simulation && (current_time(sim) - start) < time_in_ms)
+	while (!sim->stop_simulation && (current_time(sim) - start) < time)
 		//usleep(time_in_ms / 10);
-		usleep(500);
+		usleep(time / 10);
+}*/
+
+void ft_usleep(long time_in_ms, t_simulation *sim)
+{
+    long start = current_time(sim);
+
+    while ((current_time(sim) - start) < time_in_ms)
+    {
+        if (sim->stop_simulation)
+            break;
+        usleep(500);
+    }
 }
+
