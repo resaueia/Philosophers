@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/01 17:27:32 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:55:10 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int		validate_args(int argc, char **argv, t_simulation *sim)
 {
 	if (argc < 5 || argc > 6)
 	{
-		printf("Error: The number of arguments is inavlid. Try again!\n");
+		printf("Error: The number of arguments is inavlid.\n" 
+				"Try the following format: ./philo 5 800 200 200\n");
 		return (1);
 	}
 	sim->num_philo = ft_atoi(argv[1]);
