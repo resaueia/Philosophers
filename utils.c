@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:23:44 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 19:38:55 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/03 18:09:37 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,18 @@ long	current_time(t_simulation *sim)
 
 void *monitor(void *arg)
 {
-    t_simulation *sim = (t_simulation *)arg;
-    int i;
-
+    t_simulation	*sim;
+    int 			i;
+	//int				meals_finished;
+	int				all_meals_completed;
+	
+	sim = (t_simulation *)arg;
+	i = 0;
     while (!sim->stop_simulation)
     {
-        i = 0;
+		i = 0;
+		//meals_finished = 1;
+		all_meals_completed = 1;       
         while (i < sim->num_philo)
         {
             if (current_time(sim) - sim->philosophers[i].last_meal > sim->time_to_die)
@@ -67,15 +73,48 @@ void *monitor(void *arg)
                 pthread_mutex_unlock(&sim->message_lock);
                 return NULL;
             }
+			if (sim->meals_required != -1 && sim->philosophers[i].meals_eaten < sim->meals_required)
+				all_meals_completed = 0;
             i++;
         }
-        usleep(500);
+		if (sim->meals_required != -1 && all_meals_completed)
+			{
+				pthread_mutex_lock(&sim->message_lock);
+				printf("All philosophers have eaten at least %d times.\n", sim->meals_required);
+				sim->stop_simulation = 1;
+				pthread_mutex_unlock(&sim->message_lock);
+				return (NULL);
+			}
+        usleep(100);
     }
     return NULL;
 }
 
+/*void	*supervisor(void *arg)
+{
+	t_philosopher	*philosopher;
 
-void print_message(t_philosopher *philosopher, char *message)
+	philosopher = (t_philosopher *)arg;
+	while (!philosopher->sim->stop_simulation)
+	{
+		pthread_mutex_lock(&philosopher->lock);
+		if (current_time(philosopher->sim) - philosopher->last_meal > philosopher->time_to_die)
+		{
+			pthread_mutex_lock(&philosopher->sim->message_lock);
+			printf("%ld %d has died. \n", current_time(philosopher->sim), philosopher->id);
+			philosopher->sim->stop_simulation = 1;
+			pthread_mutex_unlock(&philosopher->sim->message_lock);
+			pthread_mutex_unlock(&philosopher->lock);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&philosopher->lock);
+		usleep(500);
+	}
+	return (NULL);
+}*/
+
+
+void	print_message(t_philosopher *philosopher, char *message)
 {
     if (philosopher->sim->stop_simulation)
         return;

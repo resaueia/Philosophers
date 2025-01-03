@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:50:30 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 19:36:26 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/03 17:42:40 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,41 @@ void eat(t_philosopher *philosopher)
     if (philosopher->sim->stop_simulation)
         return;
 
-    pthread_mutex_lock(&philosopher->sim->forks[philosopher->left]);
-    print_message(philosopher, "has taken a fork");
+    //pthread_mutex_lock(&philosopher->sim->forks[philosopher->left]);
+    //print_message(philosopher, "has taken a fork");
+    //pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
+    //print_message(philosopher, "has taken a fork");
 
-    pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
-    print_message(philosopher, "has taken a fork");
+	if (philosopher->id % 2 == 0) // Filosofos pares pegam o garfo direito primeiro
+    {
+        pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
+        print_message(philosopher, "has taken a fork");
+		//ft_usleep(5, philosopher->sim);
+		usleep(50);
+        pthread_mutex_lock(&philosopher->sim->forks[philosopher->left]);
+        print_message(philosopher, "has taken a fork");
+    }
+    else // Filosofos ímpares pegam o garfo esquerdo primeiro
+    {
+        pthread_mutex_lock(&philosopher->sim->forks[philosopher->left]);
+        print_message(philosopher, "has taken a fork");
+		//ft_usleep(5, philosopher->sim);
+		usleep(50);
+        pthread_mutex_lock(&philosopher->sim->forks[philosopher->right]);
+        print_message(philosopher, "has taken a fork");
+    }
 
     if (philosopher->sim->stop_simulation)
     {
         pthread_mutex_unlock(&philosopher->sim->forks[philosopher->right]);
         pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);
-        return;
+        return ;
     }
 
     print_message(philosopher, "is eating!");
     philosopher->last_meal = current_time(philosopher->sim);
     ft_usleep(philosopher->sim->time_to_eat, philosopher->sim);
+	philosopher->meals_eaten += 1;
 
     pthread_mutex_unlock(&philosopher->sim->forks[philosopher->right]);
     pthread_mutex_unlock(&philosopher->sim->forks[philosopher->left]);

@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:17:19 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 20:08:32 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/03 18:06:39 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,34 @@ void	*philosopher_routine(void *arg)
 
 int	validate_args(int argc, char **argv, t_simulation *sim)
 {
+	int	i;
+	int	j;
+
+	i = 1;
 	if (argc < 5 || argc > 6)
 	{
 		printf("Error: The number of arguments is inavlid.\n"
 				"Try the following format: ./philo 5 800 200 200\n");
 		return (1);
 	}
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (!(argv[i][j] >= '0' && argv[i][j] <= '9'))
+			{
+				printf("Argument types are invalid. Please insert only numbers.\n");
+				return (1);
+			}
+			j++;
+		}
+		i++;
+	}
+	if (argc == 6)
+		sim->meals_required = ft_atoi(argv[5]);
+	else
+		sim->meals_required = -1;
 	sim->num_philo = ft_atoi(argv[1]);
 	sim->time_to_die = ft_atol(argv[2]);
 	sim->time_to_eat = ft_atol(argv[3]);
@@ -129,28 +151,12 @@ int		main(int argc, char **argv)
 	}
 	start_simulation(&simulation);
 	//sleep(3);
-	pthread_mutex_lock(&simulation.message_lock);
-	printf("Ending simulation.\n");
-	pthread_mutex_unlock(&simulation.message_lock);
+	//pthread_mutex_lock(&simulation.message_lock);
+	//printf("Ending simulation.\n");
+	//pthread_mutex_unlock(&simulation.message_lock);
 	i = 0;
-	/*while (i < simulation.num_philo)
-	{
-		pthread_cancel(simulation.philosophers[i].thread);
-		pthread_join(simulation.philosophers[i].thread, NULL);
-		i++;
-	}
-	pthread_cancel(monitor_thread);
-    pthread_join(monitor_thread, NULL);
-	i = -1;
-	while (++i < simulation.num_philo)
-	{
-		pthread_mutex_destroy(&simulation.forks[i]);
-		pthread_mutex_destroy(&simulation.message_lock);
-	}
-	free(simulation.forks);
-	free(simulation.philosophers);*/
-	while (++i < simulation.num_philo)
-		pthread_join(simulation.philosophers[i].thread, NULL);
+	while (i < simulation.num_philo)
+		pthread_join(simulation.philosophers[i++].thread, NULL);
 	pthread_join(monitor_thread, NULL);
 	cleanup_simulation(&simulation);
 	return (0);

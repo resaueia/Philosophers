@@ -6,7 +6,7 @@
 /*   By: rsaueia <rsaueia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:57:12 by rsaueia           #+#    #+#             */
-/*   Updated: 2025/01/02 19:37:33 by rsaueia          ###   ########.fr       */
+/*   Updated: 2025/01/03 17:44:59 by rsaueia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void	cleanup_simulation(t_simulation *sim)
 {
 	int	i;
 
-	i = 1;
-	while (i <= sim->num_philo)
+	i = 0;
+	while (i < sim->num_philo)
 	{
 		pthread_mutex_destroy(&sim->forks[i]);
 		i++;
